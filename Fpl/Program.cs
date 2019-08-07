@@ -6,78 +6,55 @@
     using System.Linq;
     using System.Reflection;
     using CsvHelper;
+    using OfficeOpenXml;
 
     public static class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var players = FetchPlayers();
-            DisplayBestPlayers(players);
+            OutputPlayers(players);
         }
 
-        private static void DisplayBestPlayers(IReadOnlyList<Player> players)
+        private static void OutputPlayers(IReadOnlyList<Player> players)
         {
-            foreach (var position in new[] { Position.Goalkeeper, Position.Defender, Position.Midfielder, Position.Forward })
+            using (var package = new ExcelPackage())
             {
-                Console.WriteLine(position.ToString().ToUpperInvariant());
-                Console.WriteLine();
+                var worksheet = package.Workbook.Worksheets.Add("Players");
 
-                var playersForThisPosition = players
-                    .Where(p => p.Position == position)
-                    .ToList();
+                var rowIndex = 1;
 
-                var highestTotalPlayers = playersForThisPosition
-                    .OrderByDescending(p => p.TotalPoints)
-                    .Take(5)
-                    .ToList();
+                worksheet.Column(1).Width = 40;
+                worksheet.Column(2).Width = 15;
+                worksheet.Column(3).Width = 10;
+                worksheet.Column(4).Width = 15;
+                worksheet.Column(5).Width = 15;
+                worksheet.Column(6).Width = 20;
 
-                Console.WriteLine("Highest total points");
-                Console.WriteLine();
+                worksheet.Cells[rowIndex, 1].Value = "Full Name";
+                worksheet.Cells[rowIndex, 2].Value = "Position";
+                worksheet.Cells[rowIndex, 3].Value = "Team Id";
+                worksheet.Cells[rowIndex, 4].Value = "Price";
+                worksheet.Cells[rowIndex, 5].Value = "Total Points";
+                worksheet.Cells[rowIndex, 6].Value = "Return On Investment";
 
-                foreach (var highestTotalPlayer in highestTotalPlayers)
+                rowIndex++;
+
+                foreach (var player in players)
                 {
-                    Console.WriteLine($"{highestTotalPlayer.FullName}: {highestTotalPlayer.TotalPoints} pts, {FormatPrice(highestTotalPlayer.Price)}");
+                    worksheet.Cells[rowIndex, 1].Value = player.FullName;
+                    worksheet.Cells[rowIndex, 2].Value = player.Position;
+                    worksheet.Cells[rowIndex, 3].Value = player.TeamId;
+                    worksheet.Cells[rowIndex, 4].Value = player.Price;
+                    worksheet.Cells[rowIndex, 5].Value = player.TotalPoints;
+                    worksheet.Cells[rowIndex, 6].Value = player.ReturnOnInvestment(0);
+
+                    rowIndex++;
                 }
 
-                Console.WriteLine();
 
-                Console.WriteLine("Highest ROI");
-                Console.WriteLine();
-
-                var highestRoiPlayers = playersForThisPosition
-                    .OrderByDescending(p => p.ReturnOnInvestment(baselinePrice: 0))
-                    .Take(5)
-                    .ToList();
-
-                foreach (var highestRoiPlayer in highestRoiPlayers)
-                {
-                    Console.WriteLine($"{highestRoiPlayer.FullName}: {highestRoiPlayer.TotalPoints} pts, {FormatPrice(highestRoiPlayer.Price)}, {highestRoiPlayer.ReturnOnInvestment(baselinePrice: 0):N3}");
-                }
-
-                Console.WriteLine();
-
-                Console.WriteLine("Highest ROI by baseline");
-                Console.WriteLine();
-
-                var baseline = playersForThisPosition.Min(p => p.Price) - 5;
-
-                var highestRoiPlayersByBaseline = playersForThisPosition
-                    .OrderByDescending(p => p.ReturnOnInvestment(baselinePrice: baseline))
-                    .Take(5)
-                    .ToList();
-
-                foreach (var highestRoiPlayerByBaseline in highestRoiPlayersByBaseline)
-                {
-                    Console.WriteLine($"{highestRoiPlayerByBaseline.FullName}: {highestRoiPlayerByBaseline.TotalPoints} pts, {FormatPrice(highestRoiPlayerByBaseline.Price)}, {highestRoiPlayerByBaseline.ReturnOnInvestment(baselinePrice: baseline):N3}");
-                }
-
-                Console.WriteLine();
+                package.SaveAs(new FileInfo(@"C:\a\FPL\players.xlsx"));
             }
-        }
-
-        private static string FormatPrice(int price)
-        {
-            return $"£{(decimal)price / 10}m";
         }
 
         private static IReadOnlyList<Player> FetchPlayers()
