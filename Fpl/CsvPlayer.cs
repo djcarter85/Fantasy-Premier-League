@@ -16,6 +16,9 @@
         [Name("now_cost")]
         public int NowCost { get; set; }
 
+        [Name("minutes")]
+        public int Minutes { get; set; }
+
         [Name("team")]
         public int Team { get; set; }
 
