@@ -5,28 +5,42 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using CommandLine;
     using CsvHelper;
     using OfficeOpenXml;
 
     public static class Program
     {
-        public static void Main()
+        [Verb("select")]
+        private class SelectOptions
         {
-            var allPlayers = FetchPlayers();
-            var teams = FetchTeams();
+        }
 
-            var fantasyTeam = TeamSelector.SelectRandomTeam(allPlayers);
-            DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
+        public static int Main(string[] args)
+        {
+            return CommandLine.Parser.Default.ParseArguments<SelectOptions>(args)
+                .MapResult(
+                    (SelectOptions so) =>
+                    {
+                        var allPlayers = FetchPlayers();
+                        var teams = FetchTeams();
 
-            while (Console.ReadLine() == string.Empty)
-            {
-                for (int i = 0; i < 10000; i++)
-                {
-                    fantasyTeam = TeamSelector.ImproveTeam(fantasyTeam, allPlayers);
-                }
+                        var fantasyTeam = TeamSelector.SelectRandomTeam(allPlayers);
+                        DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
 
-                DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
-            }
+                        while (Console.ReadLine() == string.Empty)
+                        {
+                            for (int i = 0; i < 10000; i++)
+                            {
+                                fantasyTeam = TeamSelector.ImproveTeam(fantasyTeam, allPlayers);
+                            }
+
+                            DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
+                        }
+
+                        return 0;
+                    },
+                    e => 1);
         }
 
         private static void DisplayFantasyTeamAndStartingEleven(FantasyTeam fantasyTeam, IReadOnlyDictionary<int, Team> teams)
