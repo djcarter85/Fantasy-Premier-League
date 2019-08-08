@@ -16,9 +16,16 @@
         {
         }
 
+        [Verb("proc")]
+        private class ProcessOptions
+        {
+            [Value(0, Required = true)]
+            public string FilePath { get; set; }
+        }
+
         public static int Main(string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments<SelectOptions>(args)
+            return CommandLine.Parser.Default.ParseArguments<SelectOptions, ProcessOptions>(args)
                 .MapResult(
                     (SelectOptions so) =>
                     {
@@ -37,6 +44,17 @@
 
                             DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
                         }
+
+                        return 0;
+                    },
+                    (ProcessOptions po) =>
+                    {
+                        var allPlayers = FetchPlayers();
+                        var teams = FetchTeams();
+
+                        OutputPlayers(allPlayers, teams, po.FilePath);
+
+                        Console.WriteLine($"Player info output to '{po.FilePath}'");
 
                         return 0;
                     },
@@ -103,7 +121,10 @@
             }
         }
 
-        private static void OutputPlayers(IReadOnlyList<Player> players, IReadOnlyDictionary<int, Team> teams)
+        private static void OutputPlayers(
+            IReadOnlyList<Player> players,
+            IReadOnlyDictionary<int, Team> teams,
+            string filePath)
         {
             using (var package = new ExcelPackage())
             {
@@ -143,7 +164,7 @@
                 }
 
 
-                package.SaveAs(new FileInfo(@"C:\a\FPL\players.xlsx"));
+                package.SaveAs(new FileInfo(filePath));
             }
         }
 
