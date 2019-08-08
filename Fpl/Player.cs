@@ -25,6 +25,6 @@
 
         public string FullName { get; }
         public decimal PointsPerMinute => this.Minutes == 0 ? 0 : (decimal)this.TotalPoints / this.Minutes;
-        public decimal ReturnOnInvestment(int baselinePrice) => (decimal)this.TotalPoints / (this.Price - baselinePrice);
+        public decimal ReturnOnInvestment => (decimal)this.TotalPoints / this.Price;
     }
 }

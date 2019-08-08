@@ -159,7 +159,7 @@
                     worksheet.Cells[rowIndex, 3].Value = teams[player.TeamId].ShortName;
                     worksheet.Cells[rowIndex, 4].Value = player.Price;
                     worksheet.Cells[rowIndex, 5].Value = player.TotalPoints;
-                    worksheet.Cells[rowIndex, 6].Value = player.ReturnOnInvestment(0);
+                    worksheet.Cells[rowIndex, 6].Value = player.ReturnOnInvestment;
                     worksheet.Cells[rowIndex, 7].Value = player.Minutes;
                     worksheet.Cells[rowIndex, 8].Value = player.PointsPerMinute;
 
