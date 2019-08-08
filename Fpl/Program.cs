@@ -20,52 +20,56 @@
 
             while (Console.ReadLine() == string.Empty)
             {
-                fantasyTeam = TeamSelector.ImproveTeam(fantasyTeam, allPlayers);
+                for (int i = 0; i < 10000; i++)
+                {
+                    fantasyTeam = TeamSelector.ImproveTeam(fantasyTeam, allPlayers);
+                }
+
                 DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
             }
         }
 
         private static void DisplayFantasyTeamAndStartingEleven(FantasyTeam fantasyTeam, IReadOnlyDictionary<int, Team> teams)
         {
-            DisplayTeam(fantasyTeam, teams);
-
-            Console.WriteLine();
-
             var bestStartingEleven = fantasyTeam.BestStartingEleven();
 
-            DisplayTeam(bestStartingEleven, teams);
-        }
-
-        private static void DisplayTeam(StartingEleven startingEleven, IReadOnlyDictionary<int, Team> teams)
-        {
-            foreach (var player in startingEleven.Players.OrderBy(p => p.Position).ThenByDescending(p => p.TotalPoints))
+            foreach (var position in new[] { Position.Goalkeeper, Position.Defender, Position.Midfielder, Position.Forward })
             {
-                DisplayPlayer(teams, player, isCaptain: player == startingEleven.Captain);
+                foreach (var player in fantasyTeam.Players.Where(p => p.Position == position).OrderByDescending(p => p.TotalPoints))
+                {
+                    Console.WriteLine(
+                        $"{CaptainMarker(bestStartingEleven, player)} {player.Position.ShortName()}  {player.FullName,-35} {teams[player.TeamId].ShortName}  {player.TotalPoints,3}  {FormatPrice(player.Price)}");
+                }
+
+                Console.WriteLine();
             }
 
-            Console.WriteLine($"{startingEleven.Formation}, {startingEleven.TotalPoints} pts");
+            Console.WriteLine($"{bestStartingEleven.Formation}, {bestStartingEleven.TotalPoints} pts, {FormatPrice(fantasyTeam.TotalPrice)}");
+            Console.WriteLine();
         }
 
-        private static void DisplayTeam(FantasyTeam team, IReadOnlyDictionary<int, Team> teams)
+        private static string CaptainMarker(StartingEleven bestStartingEleven, Player player)
         {
-            foreach (var player in team.Players.OrderBy(p => p.Position).ThenByDescending(p => p.TotalPoints))
+            if (bestStartingEleven.Players.Contains(player))
             {
-                DisplayPlayer(teams, player, false);
+                if (player == bestStartingEleven.Captain)
+                {
+                    return "**";
+                }
+                else
+                {
+                    return " *";
+                }
             }
-
-            Console.WriteLine($"{team.TotalPoints} pts, {FormatPrice(team.TotalPrice)}, {team.IsValid()}");
-        }
-
-        private static void DisplayPlayer(IReadOnlyDictionary<int, Team> teams, Player player, bool isCaptain)
-        {
-            var captainMarker = isCaptain ? "* " : string.Empty;
-            Console.WriteLine(
-                $"{captainMarker}{player.Position.ShortName()} {player.FullName} ({teams[player.TeamId].ShortName}): {player.TotalPoints} pts, {FormatPrice(player.Price)}");
+            else
+            {
+                return "  ";
+            }
         }
 
         private static string FormatPrice(int price)
         {
-            return $"£{(decimal)price / 10}m";
+            return $"£{(decimal)price / 10:N1}m";
         }
 
         private static IReadOnlyDictionary<int, Team> FetchTeams()
