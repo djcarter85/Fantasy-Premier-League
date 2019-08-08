@@ -14,7 +14,28 @@
         {
             var players = FetchPlayers();
             var teams = FetchTeams();
-            OutputPlayers(players, teams);
+            //OutputPlayers(players, teams);
+            do
+            {
+                var randomTeam = TeamSelector.SelectRandomTeam(players);
+                DisplayTeam(randomTeam, teams);
+
+            } while (Console.ReadLine() == string.Empty);
+        }
+
+        private static void DisplayTeam(FantasyTeam team, IReadOnlyDictionary<int, Team> teams)
+        {
+            foreach (var player in team.Players)
+            {
+                Console.WriteLine($"{player.Position.ShortName()} {player.FullName} ({teams[player.TeamId].ShortName}): {player.TotalPoints} pts, {FormatPrice(player.Price)}");
+            }
+
+            Console.WriteLine($"{team.TotalPoints} pts, {FormatPrice(team.TotalPrice)}, {team.IsValid()}");
+        }
+
+        private static string FormatPrice(int price)
+        {
+            return $"£{(decimal) price / 10}m";
         }
 
         private static IReadOnlyDictionary<int, Team> FetchTeams()
