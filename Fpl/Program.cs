@@ -12,22 +12,28 @@
     {
         public static void Main()
         {
-            var players = FetchPlayers();
+            var allPlayers = FetchPlayers();
             var teams = FetchTeams();
-            //OutputPlayers(players, teams);
-            do
+
+            var fantasyTeam = TeamSelector.SelectRandomTeam(allPlayers);
+            DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
+
+            while (Console.ReadLine() == string.Empty)
             {
-                var randomTeam = TeamSelector.SelectRandomTeam(players);
+                fantasyTeam = TeamSelector.ImproveTeam(fantasyTeam, allPlayers);
+                DisplayFantasyTeamAndStartingEleven(fantasyTeam, teams);
+            }
+        }
 
-                DisplayTeam(randomTeam, teams);
+        private static void DisplayFantasyTeamAndStartingEleven(FantasyTeam fantasyTeam, IReadOnlyDictionary<int, Team> teams)
+        {
+            DisplayTeam(fantasyTeam, teams);
 
-                Console.WriteLine();
+            Console.WriteLine();
 
-                var bestStartingEleven = randomTeam.BestStartingEleven();
+            var bestStartingEleven = fantasyTeam.BestStartingEleven();
 
-                DisplayTeam(bestStartingEleven, teams);
-
-            } while (Console.ReadLine() == string.Empty);
+            DisplayTeam(bestStartingEleven, teams);
         }
 
         private static void DisplayTeam(StartingEleven startingEleven, IReadOnlyDictionary<int, Team> teams)
