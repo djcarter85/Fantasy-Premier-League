@@ -34,7 +34,7 @@
         {
             foreach (var player in startingEleven.Players.OrderBy(p => p.Position).ThenByDescending(p => p.TotalPoints))
             {
-                DisplayPlayer(teams, player);
+                DisplayPlayer(teams, player, isCaptain: player == startingEleven.Captain);
             }
 
             Console.WriteLine($"{startingEleven.Formation}, {startingEleven.TotalPoints} pts");
@@ -44,16 +44,17 @@
         {
             foreach (var player in team.Players.OrderBy(p => p.Position).ThenByDescending(p => p.TotalPoints))
             {
-                DisplayPlayer(teams, player);
+                DisplayPlayer(teams, player, false);
             }
 
             Console.WriteLine($"{team.TotalPoints} pts, {FormatPrice(team.TotalPrice)}, {team.IsValid()}");
         }
 
-        private static void DisplayPlayer(IReadOnlyDictionary<int, Team> teams, Player player)
+        private static void DisplayPlayer(IReadOnlyDictionary<int, Team> teams, Player player, bool isCaptain)
         {
+            var captainMarker = isCaptain ? "* " : string.Empty;
             Console.WriteLine(
-                $"{player.Position.ShortName()} {player.FullName} ({teams[player.TeamId].ShortName}): {player.TotalPoints} pts, {FormatPrice(player.Price)}");
+                $"{captainMarker}{player.Position.ShortName()} {player.FullName} ({teams[player.TeamId].ShortName}): {player.TotalPoints} pts, {FormatPrice(player.Price)}");
         }
 
         private static string FormatPrice(int price)
