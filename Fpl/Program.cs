@@ -139,6 +139,7 @@
                 worksheet.Column(5).Width = 15;
                 worksheet.Column(6).Width = 20;
                 worksheet.Column(7).Width = 15;
+                worksheet.Column(8).Width = 20;
 
                 worksheet.Cells[rowIndex, 1].Value = "Full Name";
                 worksheet.Cells[rowIndex, 2].Value = "Position";
@@ -147,6 +148,7 @@
                 worksheet.Cells[rowIndex, 5].Value = "Total Points";
                 worksheet.Cells[rowIndex, 6].Value = "Return On Investment";
                 worksheet.Cells[rowIndex, 7].Value = "Minutes Played";
+                worksheet.Cells[rowIndex, 8].Value = "Points per minute";
 
                 rowIndex++;
 
@@ -159,10 +161,10 @@
                     worksheet.Cells[rowIndex, 5].Value = player.TotalPoints;
                     worksheet.Cells[rowIndex, 6].Value = player.ReturnOnInvestment(0);
                     worksheet.Cells[rowIndex, 7].Value = player.Minutes;
+                    worksheet.Cells[rowIndex, 8].Value = player.PointsPerMinute;
 
                     rowIndex++;
                 }
-
 
                 package.SaveAs(new FileInfo(filePath));
             }
