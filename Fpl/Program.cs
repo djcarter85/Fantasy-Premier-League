@@ -18,24 +18,47 @@
             do
             {
                 var randomTeam = TeamSelector.SelectRandomTeam(players);
+
                 DisplayTeam(randomTeam, teams);
+
+                Console.WriteLine();
+
+                var bestStartingEleven = randomTeam.BestStartingEleven();
+
+                DisplayTeam(bestStartingEleven, teams);
 
             } while (Console.ReadLine() == string.Empty);
         }
 
+        private static void DisplayTeam(StartingEleven startingEleven, IReadOnlyDictionary<int, Team> teams)
+        {
+            foreach (var player in startingEleven.Players.OrderBy(p => p.Position).ThenByDescending(p => p.TotalPoints))
+            {
+                DisplayPlayer(teams, player);
+            }
+
+            Console.WriteLine($"{startingEleven.Formation}, {startingEleven.TotalPoints} pts");
+        }
+
         private static void DisplayTeam(FantasyTeam team, IReadOnlyDictionary<int, Team> teams)
         {
-            foreach (var player in team.Players)
+            foreach (var player in team.Players.OrderBy(p => p.Position).ThenByDescending(p => p.TotalPoints))
             {
-                Console.WriteLine($"{player.Position.ShortName()} {player.FullName} ({teams[player.TeamId].ShortName}): {player.TotalPoints} pts, {FormatPrice(player.Price)}");
+                DisplayPlayer(teams, player);
             }
 
             Console.WriteLine($"{team.TotalPoints} pts, {FormatPrice(team.TotalPrice)}, {team.IsValid()}");
         }
 
+        private static void DisplayPlayer(IReadOnlyDictionary<int, Team> teams, Player player)
+        {
+            Console.WriteLine(
+                $"{player.Position.ShortName()} {player.FullName} ({teams[player.TeamId].ShortName}): {player.TotalPoints} pts, {FormatPrice(player.Price)}");
+        }
+
         private static string FormatPrice(int price)
         {
-            return $"£{(decimal) price / 10}m";
+            return $"£{(decimal)price / 10}m";
         }
 
         private static IReadOnlyDictionary<int, Team> FetchTeams()

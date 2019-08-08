@@ -53,5 +53,41 @@
         public int TotalPrice => this.Players.Sum(p => p.Price);
 
         public int TotalPoints => this.Players.Sum(p => p.TotalPoints);
+
+        public StartingEleven BestStartingEleven()
+        {
+            StartingEleven bestStartingEleven = null;
+            int bestTotalPoints = 0;
+
+            foreach (var formation in Formation.AllValid)
+            {
+                var bestForThisFormation = this.BestStartingEleven(formation);
+                var totalPoints = bestForThisFormation.TotalPoints;
+
+                if (totalPoints > bestTotalPoints)
+                {
+                    bestStartingEleven = bestForThisFormation;
+                    bestTotalPoints = totalPoints;
+                }
+            }
+
+            return bestStartingEleven;
+        }
+
+        private StartingEleven BestStartingEleven(Formation formation)
+        {
+            var bestPlayers = new List<Player>();
+
+            foreach (var positionCount in formation.PositionCounts)
+            {
+                bestPlayers.AddRange(
+                    this.Players
+                        .Where(p => p.Position == positionCount.Key)
+                        .OrderByDescending(p => p.TotalPoints)
+                        .Take(positionCount.Value));
+            }
+
+            return new StartingEleven(bestPlayers, formation);
+        }
     }
 }
