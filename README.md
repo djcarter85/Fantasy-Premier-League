@@ -47,6 +47,12 @@ This will create a new folder called "team_<team_id>_data18-19" with individual 
 
 ## Notable Usages of this Repository
 
++ [Value in FPL 2019-20 Report by Who Got The Assist?](https://whogottheassist.com/value-in-fpl-2019-20-report/)
+
++ [Talisman Theory 2018-19 Report by Who Got The Assist?](https://whogottheassist.com/talisman-theory-part-one-2018-19-report/)
+
++ [Historical Analyses in fplscrapR by Rasmus Chrisentsen](https://twitter.com/fplscrapR)
+
 + [Linearly Optimising Fantasy Premier League Teams by Joseph O'Connor](https://medium.com/@joseph.m.oconnor.88/linearly-optimising-fantasy-premier-league-teams-3b76e9694877)
 
 + [How to Win at Fantasy Premier league using Deep learning by Paul Solomon](https://medium.com/@sol.paul/how-to-win-at-fantasy-premier-league-using-data-part-1-forecasting-with-deep-learning-bf121f38643a)
