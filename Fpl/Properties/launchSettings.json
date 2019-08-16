@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Fpl": {
+      "commandName": "Project",
+      "commandLineArgs": "fdr 2"
+    }
+  }
+}

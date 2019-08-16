@@ -23,9 +23,16 @@
             public string FilePath { get; set; }
         }
 
+        [Verb("fdr")]
+        private class FdrOptions
+        {
+            [Value(0, Required = true)]
+            public int NextGameweek { get; set; }
+        }
+
         public static int Main(string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments<SelectOptions, ProcessOptions>(args)
+            return CommandLine.Parser.Default.ParseArguments<SelectOptions, ProcessOptions, FdrOptions>(args)
                 .MapResult(
                     (SelectOptions so) =>
                     {
@@ -58,7 +65,78 @@
 
                         return 0;
                     },
+                    (FdrOptions fo) =>
+                    {
+                        var interval = new GameweekInterval(fo.NextGameweek, 5);
+
+                        var teams = FetchTeams();
+
+                        var fixtures = FetchFixtures();
+
+                        var directionalFixtures = FetchDirectionalFixtures(fixtures);
+
+                        var teamSchedules = TeamSchedules(directionalFixtures);
+
+                        DisplayTeamSchedules(teamSchedules, teams, interval);
+
+                        return 0;
+                    },
                     e => 1);
+        }
+
+        private static IReadOnlyList<TeamSchedule> TeamSchedules(IReadOnlyList<DirectionalFixture> directionalFixtures)
+        {
+            return directionalFixtures
+                .GroupBy(df => df.TeamId)
+                .Select(g => new TeamSchedule(g.Key, g.ToList()))
+                .ToList();
+        }
+
+        private static void DisplayTeamSchedules(
+            IReadOnlyList<TeamSchedule> teamSchedules,
+            IReadOnlyDictionary<int, Team> teams,
+            GameweekInterval interval)
+        {
+            foreach (var teamSchedule in teamSchedules.OrderBy(ts => ts.TotalDifficulty(interval)))
+            {
+                var team = teams[teamSchedule.TeamId];
+
+                var upcomingFixtures = teamSchedule.DirectionalFixtures
+                    .Where(df => interval.Contains(df.Gameweek))
+                    .Select(df =>
+                    {
+                        var opponent = teams[df.OpponentId];
+                        var homeAway = df.Location == MatchLocation.Home ? "H" : "A";
+                        return $"{opponent.ShortName} ({homeAway}) {df.Difficulty}";
+                    });
+
+                Console.WriteLine($"{team.Name,-15} {teamSchedule.TotalDifficulty(interval),3}   {string.Join("   ", upcomingFixtures)}");
+            }
+        }
+
+        private static IReadOnlyList<DirectionalFixture> FetchDirectionalFixtures(IReadOnlyList<Fixture> fixtures)
+        {
+            var directionalFixtures = new List<DirectionalFixture>();
+
+            foreach (var fixture in fixtures)
+            {
+                directionalFixtures.Add(
+                    new DirectionalFixture(
+                        fixture.Gameweek,
+                        fixture.HomeTeamId,
+                        fixture.AwayTeamId,
+                        MatchLocation.Home,
+                        fixture.HomeTeamDifficulty));
+                directionalFixtures.Add(
+                    new DirectionalFixture(
+                        fixture.Gameweek,
+                        fixture.AwayTeamId,
+                        fixture.HomeTeamId,
+                        MatchLocation.Away,
+                        fixture.AwayTeamDifficulty));
+            }
+
+            return directionalFixtures;
         }
 
         private static void DisplayFantasyTeamAndStartingEleven(FantasyTeam fantasyTeam, IReadOnlyDictionary<int, Team> teams)
@@ -116,8 +194,25 @@
                 var csvTeams = csv.GetRecords<CsvTeam>();
 
                 return csvTeams
-                    .Select(ct => new Team(ct.Id, ct.ShortName))
+                    .Select(ct => new Team(ct.Id, ct.ShortName, ct.Name))
                     .ToDictionary(t => t.Id);
+            }
+        }
+
+        private static IReadOnlyList<Fixture> FetchFixtures()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Fpl.fixtures.csv";
+
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var reader = new StreamReader(stream))
+            using (var csv = new CsvReader(reader))
+            {
+                var csvFixtures = csv.GetRecords<CsvFixture>();
+
+                return csvFixtures
+                    .Select(cf => new Fixture(cf.Event, cf.TeamHomeId, cf.TeamAwayId, cf.TeamHomeDifficulty, cf.TeamAwayDifficulty))
+                    .ToList();
             }
         }
 

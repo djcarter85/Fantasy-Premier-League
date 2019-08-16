@@ -9,5 +9,8 @@
 
         [Name("short_name")]
         public string ShortName { get; set; }
+
+        [Name("name")]
+        public string Name { get; set; }
     }
 }
