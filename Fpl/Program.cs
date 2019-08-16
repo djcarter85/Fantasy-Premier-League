@@ -107,7 +107,8 @@
                     {
                         var opponent = teams[df.OpponentId];
                         var homeAway = df.Location == MatchLocation.Home ? "H" : "A";
-                        return $"{opponent.ShortName} ({homeAway}) {df.Difficulty}";
+                        var x = new string('|', df.Difficulty) + new string('.', 5 - df.Difficulty);
+                        return $"{opponent.ShortName} ({homeAway}) {x}";
                     });
 
                 Console.WriteLine($"{team.Name,-15} {teamSchedule.TotalDifficulty(interval),3}   {string.Join("   ", upcomingFixtures)}");
