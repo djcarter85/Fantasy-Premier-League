@@ -6,7 +6,11 @@
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var fixtureRepository = new FixtureRepository();
+
+            var fixtures = fixtureRepository.GetAllFixtures(Season.Season1920);
+
+            Console.WriteLine(fixtures.Count);
         }
     }
 }
