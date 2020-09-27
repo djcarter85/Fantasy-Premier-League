@@ -15,11 +15,11 @@
         
         [Name("team_a_difficulty")]
         public int TeamADifficulty { get; set; }
-        
+
         [Name("team_h_score")]
-        public int TeamHScore { get; set; }
-        
+        public string TeamHScore { get; set; }
+
         [Name("team_a_score")]
-        public int TeamAScore { get; set; }
+        public string TeamAScore { get; set; }
     }
 }

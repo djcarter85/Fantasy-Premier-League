@@ -24,6 +24,7 @@
             {
                 Season.Season1819,
                 Season.Season1920,
+                Season.Season2021,
             };
 
             foreach (var season in seasons)

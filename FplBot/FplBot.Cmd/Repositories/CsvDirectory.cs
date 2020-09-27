@@ -20,6 +20,7 @@
                 Season.Season1718 => "2017-18",
                 Season.Season1819 => "2018-19",
                 Season.Season1920 => "2019-20",
+                Season.Season2021 => "2020-21",
                 _ => throw new ArgumentOutOfRangeException(nameof(season), season, null)
             };
         }

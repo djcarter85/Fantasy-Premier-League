@@ -1,5 +1,6 @@
 ﻿namespace FplBot.Cmd.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -17,9 +18,15 @@
                 var records = csv.GetRecords<CsvFixture>();
 
                 return records
+                    .Where(IsFinished)
                     .Select(ConstructFixture)
                     .ToList();
             }
+        }
+
+        private static bool IsFinished(CsvFixture csvFixture)
+        {
+            return !string.IsNullOrEmpty(csvFixture.TeamHScore) && !string.IsNullOrEmpty(csvFixture.TeamAScore);
         }
 
         private static Fixture ConstructFixture(CsvFixture csvFixture)
@@ -29,7 +36,7 @@
                 csvFixture.TeamA,
                 csvFixture.TeamHDifficulty,
                 csvFixture.TeamADifficulty,
-                new Score(csvFixture.TeamHScore, csvFixture.TeamAScore));
+                new Score((int)Convert.ToDouble(csvFixture.TeamHScore), (int)Convert.ToDouble(csvFixture.TeamAScore)));
         }
 
         private static string GetFilePath(Season season)
