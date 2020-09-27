@@ -6,11 +6,18 @@
     {
         public static void Main(string[] args)
         {
-            var fixtureRepository = new FixtureRepository();
+            var season = Season.Season1920;
 
-            var fixtures = fixtureRepository.GetAllFixtures(Season.Season1920);
+            var teams = new TeamRepository().GetAllTeams(season);
+            var fixtures = new FixtureRepository().GetAllFixtures(season);
 
-            Console.WriteLine(fixtures.Count);
+            foreach (var fixture in fixtures)
+            {
+                var homeTeam = teams[fixture.HomeTeamId];
+                var awayTeam = teams[fixture.AwayTeamId];
+
+                Console.WriteLine($"{homeTeam.ShortName} {fixture.FinalScore.Home}-{fixture.FinalScore.Away} {awayTeam.ShortName}");
+            }
         }
     }
 }
