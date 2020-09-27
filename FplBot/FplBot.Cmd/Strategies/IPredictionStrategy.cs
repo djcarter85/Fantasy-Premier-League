@@ -6,6 +6,8 @@
     {
         string Name { get; }
 
-        Score PredictScore(Fixture fixture);
+        bool CanPredict(Season season);
+
+        Score PredictScore(Fixture fixture, Season season);
     }
 }

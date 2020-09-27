@@ -16,7 +16,12 @@
         public string Name =>
             $"DifficultyBot {Display.DirectionalScore(this.win)} {Display.DirectionalScore(this.draw)}";
 
-        public Score PredictScore(Fixture fixture)
+        public bool CanPredict(Season season)
+        {
+            return true;
+        }
+
+        public Score PredictScore(Fixture fixture, Season season)
         {
             if (fixture.HomeTeamDifficulty < fixture.AwayTeamDifficulty)
             {

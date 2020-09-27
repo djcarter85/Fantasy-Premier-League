@@ -13,6 +13,7 @@
             var predictionStrategies = new IPredictionStrategy[]
             {
                 new OldNathanBot(),
+                new NewNathanBot(),
                 new DifficultyBot(win: new DirectionalScore(2, 1), draw: new DirectionalScore(1, 1)),
             };
 
@@ -31,18 +32,21 @@
 
                 foreach (var predictionStrategy in predictionStrategies)
                 {
-                    var totalPoints = 0;
-
-                    foreach (var fixture in fixtures)
+                    if (predictionStrategy.CanPredict(season))
                     {
-                        var predicted = predictionStrategy.PredictScore(fixture);
+                        var totalPoints = 0;
 
-                        var points = PointsCalculator.CalculatePoints(predicted, fixture.FinalScore);
+                        foreach (var fixture in fixtures)
+                        {
+                            var predicted = predictionStrategy.PredictScore(fixture, season);
 
-                        totalPoints += points;
+                            var points = PointsCalculator.CalculatePoints(predicted, fixture.FinalScore);
+
+                            totalPoints += points;
+                        }
+
+                        Console.WriteLine($"{predictionStrategy.Name}: {totalPoints}");
                     }
-
-                    Console.WriteLine($"{predictionStrategy.Name}: {totalPoints}");
                 }
 
                 Console.WriteLine();

@@ -13,7 +13,12 @@
 
         public string Name { get; } = "Old NathanBot";
 
-        public Score PredictScore(Fixture fixture)
+        public bool CanPredict(Season season)
+        {
+            return true;
+        }
+
+        public Score PredictScore(Fixture fixture, Season season)
         {
             var homeTeamIsBig = BigTeamIds.Contains(fixture.HomeTeamId);
             var awayTeamIsBig = BigTeamIds.Contains(fixture.AwayTeamId);
