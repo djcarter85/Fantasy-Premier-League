@@ -4,33 +4,31 @@
 
     public class DifficultyBot : IPredictionStrategy
     {
-        private readonly Score homeWinScore;
-        private readonly Score drawScore;
-        private readonly Score awayWinScore;
+        private readonly DirectionalScore win;
+        private readonly DirectionalScore draw;
 
-        public DifficultyBot(Score homeWinScore, Score drawScore, Score awayWinScore)
+        public DifficultyBot(DirectionalScore win, DirectionalScore draw)
         {
-            this.homeWinScore = homeWinScore;
-            this.drawScore = drawScore;
-            this.awayWinScore = awayWinScore;
+            this.win = win;
+            this.draw = draw;
         }
 
         public string Name =>
-            $"DifficultyBot {Display.Score(this.homeWinScore)} {Display.Score(this.drawScore)} {Display.Score(this.awayWinScore)}";
+            $"DifficultyBot {Display.DirectionalScore(this.win)} {Display.DirectionalScore(this.draw)}";
 
         public Score PredictScore(Fixture fixture)
         {
             if (fixture.HomeTeamDifficulty < fixture.AwayTeamDifficulty)
             {
-                return this.homeWinScore;
+                return this.win.ToScore(MatchResult.HomeWin);
             }
 
             if (fixture.AwayTeamDifficulty < fixture.HomeTeamDifficulty)
             {
-                return this.awayWinScore;
+                return this.win.ToScore(MatchResult.AwayWin);
             }
 
-            return this.drawScore;
+            return this.draw.ToScore(MatchResult.Draw);
         }
     }
 }

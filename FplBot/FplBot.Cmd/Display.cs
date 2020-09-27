@@ -22,5 +22,10 @@
                 _ => throw new ArgumentOutOfRangeException(nameof(season), season, null)
             };
         }
+
+        public static string DirectionalScore(DirectionalScore directionalScore)
+        {
+            return $"{directionalScore.WinningScore}-{directionalScore.LosingScore}";
+        }
     }
 }
