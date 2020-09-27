@@ -3,14 +3,14 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class NathanBot : IPredictionStrategy
+    public class OldNathanBot : IPredictionStrategy
     {
         private const int LiverpoolId = 10;
         private const int ManCityId = 11;
 
         private static readonly IEnumerable<int> BigTeamIds = new[] { LiverpoolId, ManCityId };
 
-        public string Name { get; } = "NathanBot";
+        public string Name { get; } = "Old NathanBot";
 
         public Score PredictScore(Fixture fixture)
         {

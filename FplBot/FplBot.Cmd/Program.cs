@@ -8,7 +8,7 @@
         {
             var predictionStrategies = new IPredictionStrategy[]
             {
-                new NathanBot(),
+                new OldNathanBot(),
                 new DifficultyBot(homeWinScore: new Score(1, 0), drawScore: new Score(0, 0), awayWinScore: new Score(0, 1)),
                 new DifficultyBot(homeWinScore: new Score(2, 0), drawScore: new Score(0, 0), awayWinScore: new Score(0, 2)),
                 new DifficultyBot(homeWinScore: new Score(2, 1), drawScore: new Score(0, 0), awayWinScore: new Score(1, 2)),
