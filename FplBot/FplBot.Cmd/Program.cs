@@ -9,26 +9,42 @@
             var predictionStrategies = new IPredictionStrategy[]
             {
                 new NathanBot(),
+                new DifficultyBot(homeWinScore: new Score(1, 0), drawScore: new Score(0, 0), awayWinScore: new Score(0, 1)),
+                new DifficultyBot(homeWinScore: new Score(2, 0), drawScore: new Score(0, 0), awayWinScore: new Score(0, 2)),
+                new DifficultyBot(homeWinScore: new Score(2, 1), drawScore: new Score(0, 0), awayWinScore: new Score(1, 2)),
+                new DifficultyBot(homeWinScore: new Score(1, 0), drawScore: new Score(1, 1), awayWinScore: new Score(0, 1)),
+                new DifficultyBot(homeWinScore: new Score(1, 0), drawScore: new Score(2, 2), awayWinScore: new Score(0, 1)),
             };
 
-            var season = Season.Season1920;
-
-            var fixtures = new FixtureRepository().GetAllFixtures(season);
-
-            foreach (var predictionStrategy in predictionStrategies)
+            var seasons = new[]
             {
-                var totalPoints = 0;
+                Season.Season1819,
+                Season.Season1920,
+            };
 
-                foreach (var fixture in fixtures)
+            foreach (var season in seasons)
+            {
+                Console.WriteLine(Display.Season(season));
+
+                var fixtures = new FixtureRepository().GetAllFixtures(season);
+
+                foreach (var predictionStrategy in predictionStrategies)
                 {
-                    var predicted = predictionStrategy.PredictScore(fixture);
+                    var totalPoints = 0;
 
-                    var points = PointsCalculator.CalculatePoints(predicted, fixture.FinalScore);
+                    foreach (var fixture in fixtures)
+                    {
+                        var predicted = predictionStrategy.PredictScore(fixture);
 
-                    totalPoints += points;
+                        var points = PointsCalculator.CalculatePoints(predicted, fixture.FinalScore);
+
+                        totalPoints += points;
+                    }
+
+                    Console.WriteLine($"{predictionStrategy.Name}: {totalPoints}");
                 }
 
-                Console.WriteLine($"{predictionStrategy.Name}: {totalPoints}");
+                Console.WriteLine();
             }
         }
     }

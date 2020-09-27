@@ -15,6 +15,9 @@
         {
             return season switch
             {
+                Season.Season1617 => "2016-17",
+                Season.Season1718 => "2017-18",
+                Season.Season1819 => "2018-19",
                 Season.Season1920 => "2019-20",
                 _ => throw new ArgumentOutOfRangeException(nameof(season), season, null)
             };
