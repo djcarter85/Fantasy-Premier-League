@@ -6,17 +6,29 @@
     {
         public static void Main(string[] args)
         {
+            var predictionStrategies = new IPredictionStrategy[]
+            {
+                new NathanBot(),
+            };
+
             var season = Season.Season1920;
 
-            var teams = new TeamRepository().GetAllTeams(season);
             var fixtures = new FixtureRepository().GetAllFixtures(season);
 
-            foreach (var fixture in fixtures)
+            foreach (var predictionStrategy in predictionStrategies)
             {
-                var homeTeam = teams[fixture.HomeTeamId];
-                var awayTeam = teams[fixture.AwayTeamId];
+                var totalPoints = 0;
 
-                Console.WriteLine($"{homeTeam.ShortName} {fixture.FinalScore.Home}-{fixture.FinalScore.Away} {awayTeam.ShortName}");
+                foreach (var fixture in fixtures)
+                {
+                    var predicted = predictionStrategy.PredictScore(fixture);
+
+                    var points = PointsCalculator.CalculatePoints(predicted, fixture.FinalScore);
+
+                    totalPoints += points;
+                }
+
+                Console.WriteLine($"{predictionStrategy.Name}: {totalPoints}");
             }
         }
     }

@@ -1,8 +1,8 @@
 ﻿namespace FplBot.Cmd
 {
-    public class PointsCalculator
+    public static class PointsCalculator
     {
-        public int CalculatePoints(Score predicted, Score actual)
+        public static int CalculatePoints(Score predicted, Score actual)
         {
             if (predicted.GetMatchResult() == actual.GetMatchResult())
             {
