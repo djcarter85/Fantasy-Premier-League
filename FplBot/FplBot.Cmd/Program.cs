@@ -1,6 +1,10 @@
 ﻿namespace FplBot.Cmd
 {
     using System;
+    using FplBot.Cmd.Calculations;
+    using FplBot.Cmd.Model;
+    using FplBot.Cmd.Repositories;
+    using FplBot.Cmd.Strategies;
 
     public static class Program
     {

@@ -1,4 +1,4 @@
-﻿namespace FplBot.Cmd
+﻿namespace FplBot.Cmd.Repositories
 {
     using CsvHelper.Configuration.Attributes;
 

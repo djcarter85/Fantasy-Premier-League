@@ -1,6 +1,7 @@
 ﻿namespace FplBot.Cmd
 {
     using System;
+    using FplBot.Cmd.Model;
 
     public static class Display
     {
@@ -13,10 +14,10 @@
         {
             return season switch
             {
-                Cmd.Season.Season1617 => "2016-17",
-                Cmd.Season.Season1718 => "2017-18",
-                Cmd.Season.Season1819 => "2018-19",
-                Cmd.Season.Season1920 => "2019-20",
+                Model.Season.Season1617 => "2016-17",
+                Model.Season.Season1718 => "2017-18",
+                Model.Season.Season1819 => "2018-19",
+                Model.Season.Season1920 => "2019-20",
                 _ => throw new ArgumentOutOfRangeException(nameof(season), season, null)
             };
         }

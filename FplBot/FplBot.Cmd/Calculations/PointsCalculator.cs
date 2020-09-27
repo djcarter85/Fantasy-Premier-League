@@ -1,5 +1,7 @@
-﻿namespace FplBot.Cmd
+﻿namespace FplBot.Cmd.Calculations
 {
+    using FplBot.Cmd.Model;
+
     public static class PointsCalculator
     {
         public static int CalculatePoints(Score predicted, Score actual)
