@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using CsvHelper;
+    using CsvHelper.Configuration.Attributes;
     using FplBot.Cmd.Model;
 
     public class TeamRepository
@@ -33,6 +34,18 @@
         private static string GetFilePath(Season season)
         {
             return Path.Combine(CsvDirectory.GetDirectoryPath(season), "teams.csv");
+        }
+
+        private class CsvTeam
+        {
+            [Name("id")]
+            public int Id { get; set; }
+
+            [Name("name")]
+            public string Name { get; set; }
+
+            [Name("short_name")]
+            public string ShortName { get; set; }
         }
     }
 }

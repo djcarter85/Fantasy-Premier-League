@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using CsvHelper;
+    using CsvHelper.Configuration.Attributes;
     using FplBot.Cmd.Model;
 
     public class FixtureRepository
@@ -42,6 +43,27 @@
         private static string GetFilePath(Season season)
         {
             return Path.Combine(CsvDirectory.GetDirectoryPath(season), "fixtures.csv");
+        }
+
+        private class CsvFixture
+        {
+            [Name("team_h")]
+            public int TeamH { get; set; }
+
+            [Name("team_a")]
+            public int TeamA { get; set; }
+
+            [Name("team_h_difficulty")]
+            public int TeamHDifficulty { get; set; }
+
+            [Name("team_a_difficulty")]
+            public int TeamADifficulty { get; set; }
+
+            [Name("team_h_score")]
+            public string TeamHScore { get; set; }
+
+            [Name("team_a_score")]
+            public string TeamAScore { get; set; }
         }
     }
 }
