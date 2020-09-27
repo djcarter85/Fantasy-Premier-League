@@ -9,9 +9,9 @@
     using CsvHelper.Configuration.Attributes;
     using FplBot.Cmd.Model;
 
-    public class FixtureRepository
+    public static class FixtureRepository
     {
-        public IReadOnlyList<Fixture> GetAllFixtures(Season season)
+        public static IReadOnlyList<Fixture> GetAllFixtures(Season season)
         {
             using (var reader = new StreamReader(GetFilePath(season)))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))

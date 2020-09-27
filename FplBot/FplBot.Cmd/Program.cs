@@ -31,7 +31,7 @@
             {
                 Console.WriteLine(Display.Season(season));
 
-                var fixtures = new FixtureRepository().GetAllFixtures(season);
+                var fixtures = FixtureRepository.GetAllFixtures(season);
 
                 foreach (var predictionStrategy in predictionStrategies)
                 {

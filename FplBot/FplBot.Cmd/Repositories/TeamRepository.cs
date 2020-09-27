@@ -8,9 +8,9 @@
     using CsvHelper.Configuration.Attributes;
     using FplBot.Cmd.Model;
 
-    public class TeamRepository
+    public static class TeamRepository
     {
-        public IReadOnlyDictionary<int, Team> GetAllTeams(Season season)
+        public static IReadOnlyDictionary<int, Team> GetAllTeams(Season season)
         {
             using (var reader = new StreamReader(GetFilePath(season)))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
