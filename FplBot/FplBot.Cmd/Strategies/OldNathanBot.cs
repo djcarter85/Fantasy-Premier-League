@@ -1,27 +1,23 @@
 ﻿namespace FplBot.Cmd.Strategies
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using FplBot.Cmd.Model;
 
     public class OldNathanBot : IPredictionStrategy
     {
-        private const int LiverpoolId = 10;
-        private const int ManCityId = 11;
-
-        private static readonly IEnumerable<int> BigTeamIds = new[] { LiverpoolId, ManCityId };
-
         public string Name { get; } = "Old NathanBot";
 
         public bool CanPredict(Season season)
         {
-            return true;
+            return season == Season.Season1920 || season == Season.Season2021;
         }
 
         public Score PredictScore(Fixture fixture, Season season)
         {
-            var homeTeamIsBig = BigTeamIds.Contains(fixture.HomeTeamId);
-            var awayTeamIsBig = BigTeamIds.Contains(fixture.AwayTeamId);
+            var homeTeamIsBig = TeamIsBig(fixture.HomeTeamId, season);
+            var awayTeamIsBig = TeamIsBig(fixture.AwayTeamId, season);
 
             if (homeTeamIsBig && awayTeamIsBig)
             {
@@ -39,6 +35,33 @@
             }
 
             return new Score(1, 0);
+        }
+
+        private static bool TeamIsBig(int teamId, Season season)
+        {
+            if (season == Season.Season1920)
+            {
+                var bigTeamIds = new[]
+                {
+                    10, // LIV 
+                    11, // MCI
+                };
+
+                return bigTeamIds.Contains(teamId);
+            }
+
+            if (season == Season.Season2021)
+            {
+                var bigTeamIds = new[]
+                {
+                    11, // LIV 
+                    12, // MCI
+                };
+
+                return bigTeamIds.Contains(teamId);
+            }
+
+            throw new ArgumentOutOfRangeException();
         }
     }
 }
