@@ -11,7 +11,7 @@
 
     public static class FixtureRepository
     {
-        public static IReadOnlyList<Fixture> GetAllFixtures(Season season)
+        public static IReadOnlyList<CompletedFixture> GetAllCompletedFixtures(Season season)
         {
             using (var reader = new StreamReader(GetFilePath(season)))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -19,15 +19,44 @@
                 var records = csv.GetRecords<CsvFixture>();
 
                 return records
-                    .Where(IsFinished)
+                    .Where(IsCompleted)
+                    .Select(ConstructCompletedFixture)
+                    .ToList();
+            }
+        }
+
+        public static IReadOnlyList<Fixture> GetAllFixtures(Season season, int gameweekNumber)
+        {
+            using (var reader = new StreamReader(GetFilePath(season)))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var records = csv.GetRecords<CsvFixture>();
+
+                return records
+                    .Where(cf => IsInGameweek(cf, gameweekNumber))
                     .Select(ConstructFixture)
                     .ToList();
             }
         }
 
-        private static bool IsFinished(CsvFixture csvFixture)
+        private static bool IsCompleted(CsvFixture csvFixture)
         {
             return !string.IsNullOrEmpty(csvFixture.TeamHScore) && !string.IsNullOrEmpty(csvFixture.TeamAScore);
+        }
+
+        private static bool IsInGameweek(CsvFixture csvFixture, int gameweekNumber)
+        {
+            return csvFixture.Event == gameweekNumber.ToString("F1");
+        }
+
+        private static CompletedFixture ConstructCompletedFixture(CsvFixture csvFixture)
+        {
+            return new CompletedFixture(
+                csvFixture.TeamH,
+                csvFixture.TeamA,
+                csvFixture.TeamHDifficulty,
+                csvFixture.TeamADifficulty,
+                new Score((int)Convert.ToDouble(csvFixture.TeamHScore), (int)Convert.ToDouble(csvFixture.TeamAScore)));
         }
 
         private static Fixture ConstructFixture(CsvFixture csvFixture)
@@ -36,8 +65,7 @@
                 csvFixture.TeamH,
                 csvFixture.TeamA,
                 csvFixture.TeamHDifficulty,
-                csvFixture.TeamADifficulty,
-                new Score((int)Convert.ToDouble(csvFixture.TeamHScore), (int)Convert.ToDouble(csvFixture.TeamAScore)));
+                csvFixture.TeamADifficulty);
         }
 
         private static string GetFilePath(Season season)
@@ -64,6 +92,9 @@
 
             [Name("team_a_score")]
             public string TeamAScore { get; set; }
+
+            [Name("event")]
+            public string Event { get; set; }
         }
     }
 }

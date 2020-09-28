@@ -6,14 +6,12 @@
             int homeTeamId,
             int awayTeamId,
             int homeTeamDifficulty,
-            int awayTeamDifficulty,
-            Score finalScore)
+            int awayTeamDifficulty)
         {
             this.HomeTeamId = homeTeamId;
             this.AwayTeamId = awayTeamId;
             this.HomeTeamDifficulty = homeTeamDifficulty;
             this.AwayTeamDifficulty = awayTeamDifficulty;
-            this.FinalScore = finalScore;
         }
 
         public int HomeTeamId { get; }
@@ -23,7 +21,5 @@
         public int HomeTeamDifficulty { get; }
 
         public int AwayTeamDifficulty { get; }
-
-        public Score FinalScore { get; }
     }
 }
