@@ -1,12 +1,12 @@
-﻿namespace FplBot.Cmd
+﻿namespace FplPtoBot.Cmd
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using FplBot.Cmd.Calculations;
-    using FplBot.Cmd.Model;
-    using FplBot.Cmd.Repositories;
-    using FplBot.Cmd.Strategies;
+    using FplPtoBot.Cmd.Calculations;
+    using FplPtoBot.Cmd.Model;
+    using FplPtoBot.Cmd.Repositories;
+    using FplPtoBot.Cmd.Strategies;
 
     public static class Program
     {

@@ -1,9 +1,8 @@
-﻿namespace FplBot.Cmd.Strategies
+﻿namespace FplPtoBot.Cmd.Strategies
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using FplBot.Cmd.Model;
+    using FplPtoBot.Cmd.Model;
 
     public class OldNathanBot : IPredictionStrategy
     {

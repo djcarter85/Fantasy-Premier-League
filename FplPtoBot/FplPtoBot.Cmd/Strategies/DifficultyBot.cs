@@ -1,6 +1,6 @@
-﻿namespace FplBot.Cmd.Strategies
+﻿namespace FplPtoBot.Cmd.Strategies
 {
-    using FplBot.Cmd.Model;
+    using FplPtoBot.Cmd.Model;
 
     public class DifficultyBot : IPredictionStrategy
     {

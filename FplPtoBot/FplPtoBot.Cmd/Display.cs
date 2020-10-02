@@ -1,7 +1,7 @@
-﻿namespace FplBot.Cmd
+﻿namespace FplPtoBot.Cmd
 {
     using System;
-    using FplBot.Cmd.Model;
+    using FplPtoBot.Cmd.Model;
 
     public static class Display
     {

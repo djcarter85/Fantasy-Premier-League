@@ -1,4 +1,4 @@
-﻿namespace FplBot.Cmd.Repositories
+﻿namespace FplPtoBot.Cmd.Repositories
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -6,7 +6,7 @@
     using System.Linq;
     using CsvHelper;
     using CsvHelper.Configuration.Attributes;
-    using FplBot.Cmd.Model;
+    using FplPtoBot.Cmd.Model;
 
     public static class TeamRepository
     {

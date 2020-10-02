@@ -1,6 +1,6 @@
-﻿namespace FplBot.Cmd.Calculations
+﻿namespace FplPtoBot.Cmd.Calculations
 {
-    using FplBot.Cmd.Model;
+    using FplPtoBot.Cmd.Model;
 
     public static class PointsCalculator
     {

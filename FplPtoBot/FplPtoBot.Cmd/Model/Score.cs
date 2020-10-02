@@ -1,4 +1,4 @@
-﻿namespace FplBot.Cmd.Model
+﻿namespace FplPtoBot.Cmd.Model
 {
     public class Score
     {

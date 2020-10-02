@@ -1,8 +1,8 @@
-﻿namespace FplBot.Cmd.Repositories
+﻿namespace FplPtoBot.Cmd.Repositories
 {
     using System;
     using System.IO;
-    using FplBot.Cmd.Model;
+    using FplPtoBot.Cmd.Model;
 
     public static class CsvDirectory
     {
